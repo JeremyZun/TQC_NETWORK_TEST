@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>電腦網路測驗平台</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>電腦網路測驗平台</h1>
+        <!-- 將模式選擇按鈕移到 header 中，使其常駐顯示 -->
+        <div class="mode-selection">
+            <button id="practiceModeBtn" class="mode-btn active">練習模式</button>
+            <button id="examModeBtn" class="mode-btn">模擬考模式</button>
+        </div>
+    </header>
+
+    <main>
+        <!-- 開始畫面 -->
+        <div id="startScreen" class="screen active">
+            <div class="mode-info">
+                <h2 id="modeTitle">練習模式</h2>
+                <p id="modeDescription">在練習模式中，您可以逐題練習並查看解答與解析。</p>
+                <div class="quiz-actions">
+                    <button id="favoriteQuizBtn" class="btn-secondary" style="margin: 0.5rem;">收藏題目練習</button>
+                    <button id="incorrectQuizBtn" class="btn-secondary" style="margin: 0.5rem;">錯題練習</button>
+                </div>
+                <div class="options">
+                    <label for="questionRange">選擇題目範圍：</label>
+                    <select id="questionRange">
+                        <option value="all">全部題目 (1-41)</option>
+                        <option value="1-10">題目 1-10</option>
+                        <option value="11-20">題目 11-20</option>
+                        <option value="21-30">題目 21-30</option>
+                        <option value="31-41">題目 31-41</option>
+                    </select>
+                </div>
+                
+                <!-- 模擬考模式專用資訊 -->
+                <div id="examInfo" class="exam-info hidden">
+                    <div class="exam-details">
+                        <h3>模擬考規則</h3>
+                        <ul>
+                            <li>隨機抽取 <strong>20 題</strong> 進行測驗</li>
+                            <li>時間限制：<strong>20 分鐘</strong></li>
+                            <li>選項順序會隨機打亂</li>
+                            <li>無法查看解答，需完成所有題目後才能查看結果</li>
+                            <li>時間結束將自動交卷</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <button id="startBtn" class="btn-primary">開始測驗</button>
+            </div>
+        </div>
+
+        <div id="quizScreen" class="screen">
+            <div class="quiz-header">
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+                <div class="quiz-info">
+                    <span id="questionCounter">第 1 題 / 共 41 題</span>
+                    <span id="timer" class="exam-only">剩餘時間: 20:00</span>
+                </div>
+            </div>
+
+            <div class="question-container">
+                <div class="question-header">
+                    <h3 id="questionNumber">第 1 題</h3>
+                    <span id="questionSource" class="source"></span>
+                </div>
+                <div class="question-content">
+                    <p id="questionText"></p>
+                    <div id="optionsContainer" class="options-container">
+                        <!-- 選項將由 JavaScript 動態生成 -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="navigation-buttons">
+                <button id="prevBtn" class="btn-secondary">上一題</button>
+                <button id="nextBtn" class="btn-primary">下一題</button>
+                <button id="submitBtn" class="btn-primary exam-only">交卷</button>
+            </div>
+
+            <div id="answerSection" class="answer-section practice-only">
+                <div class="answer-header">
+                    <h4>解答與解析</h4>
+                    <button id="toggleAnswerBtn" class="btn-secondary">顯示解答</button>
+                </div>
+                <div id="answerContent" class="answer-content hidden">
+                    <p><strong>正確答案：</strong><span id="correctAnswer"></span></p>
+                    <p><strong>解析：</strong><span id="explanation"></span></p>
+                </div>
+            </div>
+        </div>
+
+        <div id="resultScreen" class="screen">
+            <div class="result-container">
+                <h2>測驗結果</h2>
+                <div class="score-display">
+                    <div class="score-circle">
+                        <span id="scorePercent">0%</span>
+                    </div>
+                    <p>得分: <span id="scoreText">0</span> / <span id="totalQuestions">41</span></p>
+                </div>
+                <div class="result-details">
+                    <div class="detail-item">
+                        <span class="detail-label">正確題數:</span>
+                        <span id="correctCount">0</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">錯誤題數:</span>
+                        <span id="incorrectCount">0</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">未作答題數:</span>
+                        <span id="unansweredCount">0</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">花費時間:</span>
+                        <span id="timeSpent">0:00</span>
+                    </div>
+                </div>
+                <div class="result-actions">
+                    <button id="reviewBtn" class="btn-secondary">檢視錯題</button>
+                    <!-- 新增再考一次按鈕 -->
+                    <button id="retryExamBtn" class="btn-primary exam-only">再考一次</button>
+                    <button id="restartBtn" class="btn-primary">重新開始</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="question-bank.js"></script>
+    <script type="module" src="script.js"></script>
+</body>
+</html>
