@@ -165,6 +165,7 @@ export class QuizCore {
                 unansweredCount++;
             } else {
                 const isCorrect = this.questionManager.checkAnswerCorrectness(index);
+                console.log(`題目 ${index + 1}: 用戶答案=${answer}, 正確=${isCorrect}`); // 調試用
                 if (isCorrect) {
                     correctCount++;
                 } else {

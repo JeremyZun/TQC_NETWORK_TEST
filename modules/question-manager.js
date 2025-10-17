@@ -19,20 +19,16 @@ export class QuestionManager {
                 const shuffledOptions = this.shuffleOptions([...question.options]);
                 const optionMapping = {};
                 
-                shuffledOptions.forEach((option, index) => {
-                    optionMapping[option.id] = question.options[index].id;
+                // 確保正確創建映射：打亂後選項ID -> 原始選項ID
+                shuffledOptions.forEach((shuffledOption, index) => {
+                    const originalOption = question.options[index];
+                    optionMapping[shuffledOption.id] = originalOption.id;
                 });
                 
                 return {
                     ...question,
                     shuffledOptions: shuffledOptions,
                     optionMapping: optionMapping
-                };
-            } else {
-                return {
-                    ...question,
-                    shuffledOptions: [...question.options],
-                    optionMapping: null
                 };
             }
         });
@@ -232,6 +228,8 @@ export class QuestionManager {
         if (userAnswer === null) return false;
         
         if (this.quizCore.currentMode === 'exam' && questionData.optionMapping) {
+            // 修正：正確的映射方式
+            // optionMapping 結構應該是 {shuffledId: originalId}
             const originalAnswerId = questionData.optionMapping[userAnswer];
             return originalAnswerId === originalQuestion.correctAnswer;
         } else {
