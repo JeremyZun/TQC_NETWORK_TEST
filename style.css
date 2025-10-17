@@ -1006,3 +1006,108 @@ main {
         font-size: 0.9rem;
     }
 }
+
+/* 新增：鍵盤快捷鍵樣式 */
+.shortcut-key {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background: #3498db;
+    color: white;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-right: 0.75rem;
+    margin-left: 0.25rem;
+}
+
+.option:hover .shortcut-key {
+    background: #2980b9;
+}
+
+/* 新增：鍵盤操作提示 */
+.keyboard-hints {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 1rem 0;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    flex-wrap: wrap;
+}
+
+.keyboard-hint {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: #7f8c8d;
+}
+
+.keyboard-key {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    height: 24px;
+    background: #2c3e50;
+    color: white;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    padding: 0 0.5rem;
+}
+
+/* 新增：滑動提示（僅在行動裝置顯示） */
+.swipe-hint {
+    display: none;
+    text-align: center;
+    color: #7f8c8d;
+    font-size: 0.9rem;
+    margin: 1rem 0;
+    padding: 0.5rem;
+    background: #f8f9fa;
+    border-radius: 6px;
+}
+
+.swipe-hint::before {
+    content: "⇄";
+    margin-right: 0.5rem;
+    font-size: 1.2rem;
+}
+
+/* 響應式設計：在行動裝置顯示滑動提示 */
+@media (max-width: 768px) {
+    .swipe-hint {
+        display: block;
+    }
+    
+    .keyboard-hints {
+        display: none;
+    }
+}
+
+/* 新增：按鈕聚焦樣式 */
+.btn-primary:focus,
+.btn-secondary:focus,
+.mode-btn:focus {
+    outline: 2px solid #3498db;
+    outline-offset: 2px;
+}
+
+.option:focus-within {
+    outline: 2px solid #3498db;
+    outline-offset: 2px;
+}
+
+/* 新增：視覺回饋 */
+.option {
+    transition: all 0.2s ease;
+}
+
+.option:active {
+    transform: scale(0.98);
+}

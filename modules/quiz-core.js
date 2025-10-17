@@ -104,6 +104,14 @@ export class QuizCore {
         this.uiManager.updateProgress();
         this.uiManager.createQuestionNavigation();
         
+        // 新增：將焦點設置到題目區域
+        setTimeout(() => {
+            const questionContainer = document.querySelector('.question-container');
+            if (questionContainer) {
+                questionContainer.focus();
+            }
+        }, 100);
+        
         if (this.currentMode === 'exam') {
             this.timerManager.startTimer();
         }
@@ -182,6 +190,8 @@ export class QuizCore {
         if (this.currentQuestionIndex > 0) {
             this.currentQuestionIndex--;
             this.questionManager.displayQuestion();
+            // 新增：滾動到頂部
+            window.scrollTo(0, 0);
         }
     }
     
@@ -189,6 +199,8 @@ export class QuizCore {
         if (this.currentQuestionIndex < this.selectedQuestions.length - 1) {
             this.currentQuestionIndex++;
             this.questionManager.displayQuestion();
+            // 新增：滾動到頂部
+            window.scrollTo(0, 0);
         }
     }
     

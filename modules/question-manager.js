@@ -76,9 +76,14 @@ export class QuestionManager {
         
         const optionsToShow = questionData.shuffledOptions;
         
-        optionsToShow.forEach(option => {
+        optionsToShow.forEach((option, index) => {
             const optionElement = document.createElement('div');
             optionElement.className = 'option';
+            
+            // 添加鍵盤快捷鍵提示
+            const shortcutKey = document.createElement('span');
+            shortcutKey.className = 'shortcut-key';
+            shortcutKey.textContent = (index + 1).toString();
             
             const input = document.createElement('input');
             input.type = 'radio';
@@ -129,6 +134,7 @@ export class QuestionManager {
             label.htmlFor = `option-${option.id}`;
             label.textContent = `(${option.id}) ${option.text}`;
             
+            optionElement.appendChild(shortcutKey);
             optionElement.appendChild(input);
             optionElement.appendChild(label);
             optionsContainer.appendChild(optionElement);
@@ -167,6 +173,13 @@ export class QuestionManager {
         if (selectedInput) {
             selectedInput.checked = true;
             selectedInput.closest('.option').classList.add('selected');
+            
+            // 新增：自動聚焦到下一個按鈕
+            setTimeout(() => {
+                if (this.quizCore.currentQuestionIndex < this.quizCore.selectedQuestions.length - 1) {
+                    document.getElementById('nextBtn').focus();
+                }
+            }, 300);
         }
         
         if (this.quizCore.currentMode === 'practice' && !this.quizCore.isReviewMode) {

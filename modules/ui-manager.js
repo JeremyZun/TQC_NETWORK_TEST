@@ -33,6 +33,125 @@ export class UIManager {
             this.quizCore.questionManager.startFavoriteQuiz());
         document.getElementById('incorrectQuizBtn')?.addEventListener('click', () => 
             this.quizCore.questionManager.startIncorrectQuiz());
+
+        // 新增：鍵盤事件監聽
+        document.addEventListener('keydown', (e) => this.handleKeyPress(e));
+        
+        // 新增：觸控滑動事件監聽
+        this.initializeSwipeEvents();
+    }
+
+    // 新增：鍵盤操作處理
+    handleKeyPress(event) {
+        // 只有在測驗畫面中才啟用鍵盤操作
+        if (!document.getElementById('quizScreen').classList.contains('active')) {
+            return;
+        }
+        
+        // 防止在輸入框中觸發（比如快速跳題選單）
+        if (event.target.tagName === 'INPUT' || event.target.tagName === 'SELECT' || event.target.tagName === 'TEXTAREA') {
+            return;
+        }
+        
+        switch(event.key) {
+            case 'ArrowLeft':
+                event.preventDefault();
+                if (!document.getElementById('prevBtn').disabled) {
+                    this.quizCore.previousQuestion();
+                }
+                break;
+                
+            case 'ArrowRight':
+            case ' ':
+                event.preventDefault();
+                if (!document.getElementById('nextBtn').disabled) {
+                    this.quizCore.nextQuestion();
+                }
+                break;
+                
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+                event.preventDefault();
+                this.selectOptionByNumber(parseInt(event.key));
+                break;
+                
+            case 'Enter':
+                if (this.quizCore.currentMode === 'exam' && 
+                    this.quizCore.currentQuestionIndex === this.quizCore.selectedQuestions.length - 1) {
+                    event.preventDefault();
+                    document.getElementById('submitBtn').click();
+                }
+                break;
+                
+            case 'a':
+            case 'A':
+                event.preventDefault();
+                if (document.getElementById('toggleAnswerBtn').style.display !== 'none') {
+                    this.quizCore.questionManager.toggleAnswer();
+                }
+                break;
+        }
+    }
+
+    // 新增：數字鍵選擇選項
+    selectOptionByNumber(number) {
+        const options = document.querySelectorAll('.option input[type="radio"]');
+        if (options.length >= number) {
+            const option = options[number - 1];
+            if (option && !option.disabled) {
+                option.checked = true;
+                option.dispatchEvent(new Event('change'));
+            }
+        }
+    }
+
+    // 新增：觸控滑動事件初始化
+    initializeSwipeEvents() {
+        const quizScreen = document.getElementById('quizScreen');
+        let startX = 0;
+        let startY = 0;
+        let endX = 0;
+        let endY = 0;
+        
+        const handleTouchStart = (e) => {
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+        };
+        
+        const handleTouchMove = (e) => {
+            endX = e.touches[0].clientX;
+            endY = e.touches[0].clientY;
+        };
+        
+        const handleTouchEnd = () => {
+            const diffX = startX - endX;
+            const diffY = startY - endY;
+            
+            // 確保是水平滑動（垂直移動小於水平移動）
+            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+                // 防止在滾動時誤觸
+                if (Math.abs(diffY) < 100) {
+                    if (diffX > 0) {
+                        // 向左滑動 - 下一題
+                        if (!document.getElementById('nextBtn').disabled) {
+                            this.quizCore.nextQuestion();
+                        }
+                    } else {
+                        // 向右滑動 - 上一題
+                        if (!document.getElementById('prevBtn').disabled) {
+                            this.quizCore.previousQuestion();
+                        }
+                    }
+                }
+            }
+        };
+        
+        // 為測驗畫面添加觸控事件
+        quizScreen.addEventListener('touchstart', handleTouchStart, { passive: true });
+        quizScreen.addEventListener('touchmove', handleTouchMove, { passive: true });
+        quizScreen.addEventListener('touchend', handleTouchEnd, { passive: true });
     }
     
     showScreen(screenId) {
