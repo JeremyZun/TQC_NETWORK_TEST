@@ -66,57 +66,65 @@
                 </div>
             </div>
 
-            <div class="question-container">
-                <div class="question-header">
-                    <h3 id="questionNumber">第 1 題</h3>
-                    <span id="questionSource" class="source"></span>
+            <!-- 可滾動的題目區域 -->
+            <div class="question-scrollable">
+                <div class="question-container">
+                    <div class="question-header">
+                        <h3 id="questionNumber">第 1 題</h3>
+                        <span id="questionSource" class="source"></span>
+                    </div>
+                    <div class="question-content">
+                        <p id="questionText"></p>
+                        <div id="optionsContainer" class="options-container">
+                            <!-- 選項將由 JavaScript 動態生成 -->
+                        </div>
+                    </div>
                 </div>
-                <div class="question-content">
-                    <p id="questionText"></p>
-                    <div id="optionsContainer" class="options-container">
-                        <!-- 選項將由 JavaScript 動態生成 -->
+
+                <!-- 解答區域 -->
+                <div id="answerSection" class="answer-section practice-only">
+                    <div class="answer-header">
+                        <h4>解答與解析</h4>
+                        <button id="toggleAnswerBtn" class="btn-secondary">顯示解答</button>
+                    </div>
+                    <div id="answerContent" class="answer-content hidden">
+                        <p><strong>正確答案：</strong><span id="correctAnswer"></span></p>
+                        <p><strong>解析：</strong><span id="explanation"></span></p>
                     </div>
                 </div>
             </div>
 
-            <!-- 新增：操作提示區域 -->
-            <div class="keyboard-hints">
-                <div class="keyboard-hint">
-                    <span class="keyboard-key">←</span>
-                    <span>上一題</span>
+            <!-- 固定的底部操作區域 -->
+            <div class="quiz-bottom-section">
+                <!-- 桌面鍵盤提示 -->
+                <div class="keyboard-hints">
+                    <div class="keyboard-hint">
+                        <span class="keyboard-key">←</span>
+                        <span>上一題</span>
+                    </div>
+                    <div class="keyboard-hint">
+                        <span class="keyboard-key">→</span>
+                        <span>下一題</span>
+                    </div>
+                    <div class="keyboard-hint">
+                        <span class="keyboard-key">1-4</span>
+                        <span>選擇答案</span>
+                    </div>
+                    <div class="keyboard-hint">
+                        <span class="keyboard-key">A</span>
+                        <span>顯示解答</span>
+                    </div>
                 </div>
-                <div class="keyboard-hint">
-                    <span class="keyboard-key">→</span>
-                    <span>下一題</span>
+                
+                <!-- 行動裝置提示 -->
+                <div class="mobile-hints">
+                    <span>左右滑動切換題目 • 點擊選項選擇答案</span>
                 </div>
-                <div class="keyboard-hint">
-                    <span class="keyboard-key">1-4</span>
-                    <span>選擇答案</span>
-                </div>
-                <div class="keyboard-hint">
-                    <span class="keyboard-key">A</span>
-                    <span>顯示解答</span>
-                </div>
-            </div>
-            
-<!--             <div class="swipe-hint">
-                左右滑動切換題目
-            </div> -->
 
-            <div class="navigation-buttons">
-                <button id="prevBtn" class="btn-secondary">上一題</button>
-                <button id="nextBtn" class="btn-primary">下一題</button>
-                <button id="submitBtn" class="btn-primary exam-only">交卷</button>
-            </div>
-
-            <div id="answerSection" class="answer-section practice-only">
-                <div class="answer-header">
-                    <h4>解答與解析</h4>
-                    <button id="toggleAnswerBtn" class="btn-secondary">顯示解答</button>
-                </div>
-                <div id="answerContent" class="answer-content hidden">
-                    <p><strong>正確答案：</strong><span id="correctAnswer"></span></p>
-                    <p><strong>解析：</strong><span id="explanation"></span></p>
+                <div class="navigation-buttons">
+                    <button id="prevBtn" class="btn-secondary">上一題</button>
+                    <button id="nextBtn" class="btn-primary">下一題</button>
+                    <button id="submitBtn" class="btn-primary exam-only">交卷</button>
                 </div>
             </div>
         </div>

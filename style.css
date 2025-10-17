@@ -1111,3 +1111,155 @@ main {
 .option:active {
     transform: scale(0.98);
 }
+/* 確保主要內容區域始終固定在底部 */
+main {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    min-height: calc(100vh - 120px); /* 減去 header 高度 */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* 測驗畫面容器 */
+#quizScreen {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: calc(100vh - 120px);
+}
+
+#quizScreen.active {
+    display: flex;
+}
+
+/* 題目區域可滾動 */
+.question-scrollable {
+    flex: 1;
+    overflow-y: auto;
+    max-height: 60vh;
+    margin-bottom: 1rem;
+    padding: 0 0.5rem;
+}
+
+/* 底部操作區域固定 */
+.quiz-bottom-section {
+    position: sticky;
+    bottom: 0;
+    background: white;
+    padding: 1rem 0;
+    border-top: 1px solid #ecf0f1;
+    margin-top: auto;
+}
+
+/* 確保導航按鈕在底部可見 */
+.navigation-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0;
+    gap: 1rem;
+    position: relative;
+    z-index: 100;
+}
+
+/* 解答區域調整 */
+.answer-section {
+    margin-top: 1rem;
+    max-height: 30vh;
+    overflow-y: auto;
+}
+
+/* 鍵盤提示區域調整 */
+.keyboard-hints {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 0.5rem 0;
+    padding: 0.75rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 90;
+}
+
+/* 行動裝置優化 */
+@media (max-width: 768px) {
+    main {
+        min-height: calc(100vh - 100px);
+        margin: 1rem auto;
+        padding: 0 0.5rem;
+    }
+    
+    #quizScreen {
+        min-height: calc(100vh - 100px);
+    }
+    
+    .question-scrollable {
+        max-height: 50vh;
+        margin-bottom: 120px; /* 為固定底部留出空間 */
+    }
+    
+    .quiz-bottom-section {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: white;
+        padding: 1rem;
+        box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+        border-top: 1px solid #ddd;
+        z-index: 1000;
+    }
+    
+    /* 為可滾動內容添加底部間距，避免被固定底部遮擋 */
+    .question-scrollable {
+        margin-bottom: 120px; /* 底部區域高度 */
+    }
+    
+    .answer-section {
+        margin-bottom: 120px;
+        max-height: 25vh;
+    }
+    
+    .navigation-buttons {
+        flex-direction: row;
+        gap: 0.5rem;
+    }
+    
+    .navigation-buttons button {
+        min-height: 44px; /* 觸控友好 */
+    }
+    
+    /* 隱藏桌面鍵盤提示，顯示行動提示 */
+    .keyboard-hints {
+        display: none;
+    }
+    
+    .mobile-hints {
+        display: block;
+        text-align: center;
+        color: #7f8c8d;
+        font-size: 0.9rem;
+        margin: 0.5rem 0;
+        padding: 0.5rem;
+        background: #f8f9fa;
+        border-radius: 6px;
+    }
+}
+
+/* 桌面設備保持原有鍵盤提示 */
+@media (min-width: 769px) {
+    .mobile-hints {
+        display: none;
+    }
+    
+    .keyboard-hints {
+        display: flex;
+    }
+
+    .mobile-hints {
+        display: none;
+    }
+}

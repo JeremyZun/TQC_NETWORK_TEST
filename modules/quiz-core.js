@@ -191,8 +191,8 @@ export class QuizCore {
         if (this.currentQuestionIndex > 0) {
             this.currentQuestionIndex--;
             this.questionManager.displayQuestion();
-            // 新增：滾動到頂部
-            window.scrollTo(0, 0);
+            // 新增：確保底部可見
+            this.uiManager.ensureBottomSectionVisible();
         }
     }
     
@@ -200,8 +200,8 @@ export class QuizCore {
         if (this.currentQuestionIndex < this.selectedQuestions.length - 1) {
             this.currentQuestionIndex++;
             this.questionManager.displayQuestion();
-            // 新增：滾動到頂部
-            window.scrollTo(0, 0);
+            // 新增：確保底部可見
+            this.uiManager.ensureBottomSectionVisible();
         }
     }
     

@@ -58,6 +58,7 @@ export class UIManager {
                 event.preventDefault();
                 if (!document.getElementById('prevBtn').disabled) {
                     this.quizCore.previousQuestion();
+                    this.ensureBottomSectionVisible();
                 }
                 break;
                 
@@ -66,6 +67,7 @@ export class UIManager {
                 event.preventDefault();
                 if (!document.getElementById('nextBtn').disabled) {
                     this.quizCore.nextQuestion();
+                    this.ensureBottomSectionVisible();
                 }
                 break;
                 
@@ -75,6 +77,7 @@ export class UIManager {
             case '4':
                 event.preventDefault();
                 this.selectOptionByNumber(parseInt(event.key));
+                this.ensureBottomSectionVisible();
                 break;
                 
             case 'Enter':
@@ -90,9 +93,22 @@ export class UIManager {
                 event.preventDefault();
                 if (document.getElementById('toggleAnswerBtn').style.display !== 'none') {
                     this.quizCore.questionManager.toggleAnswer();
+                    this.ensureBottomSectionVisible();
                 }
                 break;
         }
+    }
+
+    // 新增方法：確保底部區域可見
+    ensureBottomSectionVisible() {
+        setTimeout(() => {
+            if (window.innerWidth <= 768) {
+                const bottomSection = document.querySelector('.quiz-bottom-section');
+                if (bottomSection) {
+                    bottomSection.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                }
+            }
+        }, 100);
     }
 
     // 新增：數字鍵選擇選項

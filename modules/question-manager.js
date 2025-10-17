@@ -16,12 +16,11 @@ export class QuestionManager {
         this.quizCore.selectedQuestions = filteredQuestions;
         this.quizCore.shuffledQuestions = this.quizCore.selectedQuestions.map(question => {
             if (this.quizCore.currentMode === 'exam') {
-                // 創建選項的副本以避免引用問題
                 const originalOptions = question.options.map(opt => ({...opt}));
                 const shuffledOptions = this.shuffleOptions([...originalOptions]);
                 const optionMapping = {};
                 
-                // 正確的映射創建：基於選項文本內容建立對應關係
+                // 基於選項文本建立映射
                 originalOptions.forEach(originalOption => {
                     const shuffledOption = shuffledOptions.find(opt => 
                         opt.text === originalOption.text
@@ -30,9 +29,6 @@ export class QuestionManager {
                         optionMapping[shuffledOption.id] = originalOption.id;
                     }
                 });
-                
-                console.log('原始正確答案:', question.correctAnswer);
-                console.log('optionMapping:', optionMapping);
                 
                 return {
                     ...question,
@@ -52,6 +48,25 @@ export class QuestionManager {
         this.quizCore.currentQuestionIndex = 0;
     }
     
+    // 新增方法：確保底部操作區域可見
+    ensureBottomSectionVisible() {
+        setTimeout(() => {
+            // 自動滾動到頂部
+            const scrollableArea = document.querySelector('.question-scrollable');
+            if (scrollableArea) {
+                scrollableArea.scrollTop = 0;
+            }
+            
+            // 在行動裝置上確保底部區域可見
+            if (window.innerWidth <= 768) {
+                const bottomSection = document.querySelector('.quiz-bottom-section');
+                if (bottomSection) {
+                    bottomSection.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                }
+            }
+        }, 100);
+    }
+
     displayQuestion() {
         if (this.quizCore.selectedQuestions.length === 0 || 
             this.quizCore.currentQuestionIndex >= this.quizCore.selectedQuestions.length) {
@@ -169,6 +184,9 @@ export class QuestionManager {
         this.quizCore.uiManager.createQuestionNavigation();
         this.addQuestionJumpMenu();
         this.addFavoriteButton();
+
+        // 在方法結尾添加滾動控制
+        this.ensureBottomSectionVisible();
     }
     
     selectAnswer(answer) {
@@ -240,29 +258,13 @@ export class QuestionManager {
         const questionData = this.quizCore.shuffledQuestions[questionIndex];
         const userAnswer = this.quizCore.userAnswers[questionIndex];
         
-        if (userAnswer === null) {
-            console.log(`題目 ${questionIndex + 1}: 未作答`);
-            return false;
-        }
+        if (userAnswer === null) return false;
         
         if (this.quizCore.currentMode === 'exam' && questionData.optionMapping) {
             const originalAnswerId = questionData.optionMapping[userAnswer];
-            
-            // 詳細調試信息
-            console.log(`=== 題目 ${questionIndex + 1} 驗證詳情 ===`);
-            console.log('用戶選擇的打亂選項ID:', userAnswer);
-            console.log('映射後的原始選項ID:', originalAnswerId);
-            console.log('正確答案:', originalQuestion.correctAnswer);
-            console.log('optionMapping:', questionData.optionMapping);
-            console.log('是否正確:', originalAnswerId === originalQuestion.correctAnswer);
-            console.log('========================');
-            
             return originalAnswerId === originalQuestion.correctAnswer;
         } else {
-            // 練習模式直接比較
-            const isCorrect = userAnswer === originalQuestion.correctAnswer;
-            console.log(`題目 ${questionIndex + 1} (練習模式): 用戶答案=${userAnswer}, 正確答案=${originalQuestion.correctAnswer}, 正確=${isCorrect}`);
-            return isCorrect;
+            return userAnswer === originalQuestion.correctAnswer;
         }
     }
     
