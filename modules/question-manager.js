@@ -19,16 +19,29 @@ export class QuestionManager {
                 const shuffledOptions = this.shuffleOptions([...question.options]);
                 const optionMapping = {};
                 
-                // 確保正確創建映射：打亂後選項ID -> 原始選項ID
+                // 調試：輸出原始選項和打亂後的選項
+                console.log('原始選項:', question.options.map(opt => opt.id));
+                console.log('打亂後選項:', shuffledOptions.map(opt => opt.id));
+                
+                // 修正映射創建邏輯
                 shuffledOptions.forEach((shuffledOption, index) => {
                     const originalOption = question.options[index];
                     optionMapping[shuffledOption.id] = originalOption.id;
                 });
                 
+                console.log('optionMapping:', optionMapping);
+                console.log('正確答案:', question.correctAnswer);
+                
                 return {
                     ...question,
                     shuffledOptions: shuffledOptions,
                     optionMapping: optionMapping
+                };
+            } else {
+                return {
+                    ...question,
+                    shuffledOptions: [...question.options],
+                    optionMapping: null
                 };
             }
         });
@@ -228,9 +241,15 @@ export class QuestionManager {
         if (userAnswer === null) return false;
         
         if (this.quizCore.currentMode === 'exam' && questionData.optionMapping) {
-            // 修正：正確的映射方式
-            // optionMapping 結構應該是 {shuffledId: originalId}
             const originalAnswerId = questionData.optionMapping[userAnswer];
+            
+            // 調試信息
+            console.log(`題目 ${questionIndex + 1} 驗證:`);
+            console.log('用戶選擇的打亂選項ID:', userAnswer);
+            console.log('映射後的原始選項ID:', originalAnswerId);
+            console.log('正確答案:', originalQuestion.correctAnswer);
+            console.log('是否正確:', originalAnswerId === originalQuestion.correctAnswer);
+            
             return originalAnswerId === originalQuestion.correctAnswer;
         } else {
             return userAnswer === originalQuestion.correctAnswer;
