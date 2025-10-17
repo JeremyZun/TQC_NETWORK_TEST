@@ -16,21 +16,23 @@ export class QuestionManager {
         this.quizCore.selectedQuestions = filteredQuestions;
         this.quizCore.shuffledQuestions = this.quizCore.selectedQuestions.map(question => {
             if (this.quizCore.currentMode === 'exam') {
-                const shuffledOptions = this.shuffleOptions([...question.options]);
+                // 創建選項的副本以避免引用問題
+                const originalOptions = question.options.map(opt => ({...opt}));
+                const shuffledOptions = this.shuffleOptions([...originalOptions]);
                 const optionMapping = {};
                 
-                // 調試：輸出原始選項和打亂後的選項
-                console.log('原始選項:', question.options.map(opt => opt.id));
-                console.log('打亂後選項:', shuffledOptions.map(opt => opt.id));
-                
-                // 修正映射創建邏輯
-                shuffledOptions.forEach((shuffledOption, index) => {
-                    const originalOption = question.options[index];
-                    optionMapping[shuffledOption.id] = originalOption.id;
+                // 正確的映射創建：基於選項文本內容建立對應關係
+                originalOptions.forEach(originalOption => {
+                    const shuffledOption = shuffledOptions.find(opt => 
+                        opt.text === originalOption.text
+                    );
+                    if (shuffledOption) {
+                        optionMapping[shuffledOption.id] = originalOption.id;
+                    }
                 });
                 
+                console.log('原始正確答案:', question.correctAnswer);
                 console.log('optionMapping:', optionMapping);
-                console.log('正確答案:', question.correctAnswer);
                 
                 return {
                     ...question,
@@ -238,21 +240,29 @@ export class QuestionManager {
         const questionData = this.quizCore.shuffledQuestions[questionIndex];
         const userAnswer = this.quizCore.userAnswers[questionIndex];
         
-        if (userAnswer === null) return false;
+        if (userAnswer === null) {
+            console.log(`題目 ${questionIndex + 1}: 未作答`);
+            return false;
+        }
         
         if (this.quizCore.currentMode === 'exam' && questionData.optionMapping) {
             const originalAnswerId = questionData.optionMapping[userAnswer];
             
-            // 調試信息
-            console.log(`題目 ${questionIndex + 1} 驗證:`);
+            // 詳細調試信息
+            console.log(`=== 題目 ${questionIndex + 1} 驗證詳情 ===`);
             console.log('用戶選擇的打亂選項ID:', userAnswer);
             console.log('映射後的原始選項ID:', originalAnswerId);
             console.log('正確答案:', originalQuestion.correctAnswer);
+            console.log('optionMapping:', questionData.optionMapping);
             console.log('是否正確:', originalAnswerId === originalQuestion.correctAnswer);
+            console.log('========================');
             
             return originalAnswerId === originalQuestion.correctAnswer;
         } else {
-            return userAnswer === originalQuestion.correctAnswer;
+            // 練習模式直接比較
+            const isCorrect = userAnswer === originalQuestion.correctAnswer;
+            console.log(`題目 ${questionIndex + 1} (練習模式): 用戶答案=${userAnswer}, 正確答案=${originalQuestion.correctAnswer}, 正確=${isCorrect}`);
+            return isCorrect;
         }
     }
     
@@ -574,11 +584,18 @@ export class QuestionManager {
     }
     
     shuffleOptions(options) {
-        const shuffled = [...options];
+        // 創建完全獨立的副本
+        const shuffled = options.map(option => ({
+            id: option.id,
+            text: option.text
+        }));
+        
+        // Fisher-Yates 洗牌算法
         for (let i = shuffled.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
         }
+        
         return shuffled;
     }
     
