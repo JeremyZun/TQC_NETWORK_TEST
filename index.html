@@ -29,11 +29,23 @@
                 <div class="options">
                     <label for="questionRange">選擇題目範圍：</label>
                     <select id="questionRange">
-                        <option value="all">全部題目 (1-41)</option>
+                        <option value="all">全部題目 (1-119)</option>
+                        <!-- 原有題目範圍 -->
                         <option value="1-10">題目 1-10</option>
                         <option value="11-20">題目 11-20</option>
                         <option value="21-30">題目 21-30</option>
                         <option value="31-41">題目 31-41</option>
+                        <!-- 新增題目範圍 -->
+                        <option value="42-50">題目 42-50 (網路設備基礎)</option>
+                        <option value="51-60">題目 51-60 (網路拓樸)</option>
+                        <option value="61-70">題目 61-70 (網路協定與設定)</option>
+                        <option value="71-81">題目 71-81 (進階網路概念)</option>
+                        <!-- 特殊分類 -->
+                        <option value="42-62">網路架構與設備 (42-62)</option>
+                        <option value="63-81">網路協定與進階概念 (63-81)</option>
+                        <option value="82-95">ITS考題觀摩 1 (82-95)</option>
+                        <option value="96-109">ITS考題觀摩 2 (96-109)</option>
+                        <option value="110-119">ITS考題觀摩 3 (110-119)</option>
                     </select>
                 </div>
                 
@@ -61,7 +73,7 @@
                     <div class="progress-fill"></div>
                 </div>
                 <div class="quiz-info">
-                    <span id="questionCounter">第 1 題 / 共 41 題</span>
+                    <span id="questionCounter">第 1 題 / 共 81 題</span>
                     <span id="timer" class="exam-only">剩餘時間: 20:00</span>
                 </div>
             </div>
@@ -114,6 +126,10 @@
                         <span class="keyboard-key">A</span>
                         <span>顯示解答</span>
                     </div>
+                    <div class="keyboard-hint">
+                        <span class="keyboard-key">J</span>
+                        <span>快速跳題</span>
+                    </div>
                 </div>
                 
                 <!-- 行動裝置提示 -->
@@ -136,7 +152,7 @@
                     <div class="score-circle">
                         <span id="scorePercent">0%</span>
                     </div>
-                    <p>得分: <span id="scoreText">0</span> / <span id="totalQuestions">41</span></p>
+                    <p>得分: <span id="scoreText">0</span> / <span id="totalQuestions">81</span></p>
                 </div>
                 <div class="result-details">
                     <div class="detail-item">
